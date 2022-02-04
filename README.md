@@ -23,14 +23,20 @@ Read-Host "Enter Password" -AsSecureString | ConvertFrom-SecureString | Out-File
 
 ### Normal Use
 To normally run it, where:
-FDQN or IP - needs to be either the IP address of the Fortigate or a resolvable FQDN
-username - needs to be a user with administrative-level access
-.\password.txt - needs to reference the same file created earlier
-fg.example.com - needs to be the same FQDN that the certificate is created for
+$Fortigate = "<IP or FQDN of Fortigate>"
+$User = "<username>"
+$PasswordFile = "<path to password file>"
+$CertPath = "<path to PFX certificate file>"
+$PFXPasswordFile = "<path to PFX password file>"
+$CertName = "<name of certificate to be displayed on Fortigate (optional)>"
 
 ```powershell
-$Fortigate = "<FQDN or IP of Fortigate>"
-$CertPath = "Path to PFX file"
-$CertPassword = (gc .\pfxpassword.txt | ConvertTo-SecureString)
-.\Update-FortigateLECert.ps1 -Fortigate $Fortigate -Credential $(New-Object pscredential 'username',(gc .\password.txt | ConvertTo-SecureString)) -CertPath $CertPath -CertPassword $CertPassword
+$Fortigate = "fg.example.com"
+$User = "administrator"
+$PasswordFile = "C:\Password.txt"
+$CertPath = "C:\certificate.pfx"
+$PFXPasswordFile = "C:\certificatePassword.txt"
+$CertName = "Certificate2022"
+
+.\Update-FortigateLECert.ps1 -Fortigate $Fortigate -Credential $(New-Object pscredential $User,(gc $PasswordFile | ConvertTo-SecureString)) -CertPath $CertPath -CertPassword $PFXPasswordFile -CertName $CertName
 ```
